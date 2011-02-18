@@ -1,4 +1,4 @@
-require 'spec/helper'
+require File.expand_path(File.join(File.dirname(__FILE__),'..','..','spec_helper.rb'))
 require 'fsr/listener/header_and_content_response'
 
 describe FSL::HeaderAndContentResponse do

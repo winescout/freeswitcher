@@ -1,4 +1,4 @@
-require 'spec/helper'
+require File.expand_path(File.join(File.dirname(__FILE__),'..','..','spec_helper.rb'))
 require 'lib/fsr'
 require "fsr/listener"
 require "fsr/listener/inbound"

@@ -1,10 +1,9 @@
-require 'spec/helper'
+require File.expand_path(File.join(File.dirname(__FILE__),'..','..','spec_helper.rb'))
 require 'lib/fsr'
 require "fsr/listener"
 require "fsr/listener/inbound"
 require "fsr/listener/outbound"
-require "em-spec/bacon"
-EM.spec_backend = EventMachine::Spec::Bacon
+
 # Bare class to use for testing
 class MyListener < FSR::Listener::Outbound
   attr_accessor :recvd_reply, :state_machine_test, :state_machine_test2
