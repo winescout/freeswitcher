@@ -1,7 +1,9 @@
-require File.join(File.expand_path("../", __FILE__), "../lib/fsr")
-require FSR::ROOT/".."/:spec/:helper
-require FSR::ROOT/:fsr/:listener/:outbound
-require "em-spec/bacon"
+require File.join(File.expand_path(__FILE__), 'spec_helper.rb')
+
+# these can be removed
+#require FSR::ROOT/:fsr/:listener/:outbound
+#require "em-spec/bacon"
+
 EM.spec_backend = EventMachine::Spec::Bacon
 require "fileutils"
 

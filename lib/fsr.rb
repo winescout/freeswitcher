@@ -1,6 +1,7 @@
 require 'socket'
 require 'pathname'
 require 'pp'
+require 'log4r'
 
 # Author::    TJ Vanderpoel (mailto:bougy.man@gmail.com)
 # Copyright:: Copyright (c) 2009 The Rubyists (Jayson Vaughn, TJ Vanderpoel, Michael Fellinger, Kevin Berry)
