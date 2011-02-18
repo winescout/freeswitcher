@@ -1,5 +1,5 @@
-require 'spec/helper'
-
+#require 'spec/helper'
+require File.expand_path(File.join(File.dirname(__FILE__),'..','spec_helper.rb'))
 
 describe "Testing FSR module loading methods" do
   # When you add applications  you must modify the expected apps_loaded behavior
