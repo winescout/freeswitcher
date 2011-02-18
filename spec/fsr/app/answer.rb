@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__),'..','spec_helper.rb'))
+require File.expand_path(File.join(File.dirname(__FILE__),'..','..','spec_helper.rb'))
 require "fsr/app"
 
 FSR::App.load_application("answer")

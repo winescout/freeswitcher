@@ -7,3 +7,4 @@ script/ride*
 tasks/ride.rake
 tasks/rspec.rake
 pkg/*
+Gemfile.lock
