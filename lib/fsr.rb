@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'bundler/setup'
+
 require 'socket'
 require 'pathname'
 require 'pp'

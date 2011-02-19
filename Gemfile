@@ -1,5 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'bacon'
 gem 'log4r'
 gem 'rspec'
+gem 'eventmachine'
+gem 'em-spec', :path => "~/projects/telephony/em-spec" 
+
+
