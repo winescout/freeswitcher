@@ -3,6 +3,7 @@ require 'lib/fsr'
 require "fsr/listener"
 require "fsr/listener/inbound"
 require "fsr/listener/outbound"
+require 'em-spec/rspec'
 
 # Bare class to use for testing
 class MyListener < FSR::Listener::Outbound
@@ -61,84 +62,86 @@ end
 
 # Begin testing MyListener
 EM.describe MyListener do
+  include EM::SpecHelper
 
   before do
     @listener = MyListener.new(nil)
   end
 
-  should "send connect to freeswitch upon a new connection" do
+  it "should send connect to freeswitch upon a new connection" do
     @listener.receive_data("Content-Length: 0\nCaller-Caller-ID-Number: 8675309\n\n")
-    @listener.sent_data.should.equal "connect\n\n"
+    @listener.sent_data.should.equal? "connect\n\n"
     done
   end
 
-  should "be able to receive a connection and establish a session " do
+  it "should be able to receive a connection and establish a session " do
     @listener.receive_data("Content-Length: 0\nTest: Testing\n\n")
-    @listener.session.class.should.equal FSR::Listener::HeaderAndContentResponse
+    @listener.session.class.should.equal? FSR::Listener::HeaderAndContentResponse
     done
   end
 
-  should "be able to read FreeSWITCH channel variables through session" do
+  it "should be able to read FreeSWITCH channel variables through session" do
     @listener.receive_data("Content-Length: 0\nCaller-Caller-ID-Number: 8675309\n\n")
-    @listener.session.headers[:caller_caller_id_number].should.equal "8675309"
+    @listener.session.headers[:caller_caller_id_number].should.equal? "8675309"
     done
   end
 
-  should "be able to receive and process a response if not sent in one transmission" do
+  
+  it "should be able to receive and process a response if not sent in one transmission" do
     @listener.receive_data("Content-Length: ")
     @listener.receive_data("0\nCaller-Caller-")
     @listener.receive_data("ID-Number: 8675309\n\n")
-    @listener.session.headers[:caller_caller_id_number].should.equal "8675309"
+    @listener.session.headers[:caller_caller_id_number].should.equal? "8675309"
     done
   end
 
-  should "be able to dispatch our receive_reply callback method after a session is already established" do
+  it "should be able to dispatch our receive_reply callback method after a session is already established" do
     # This should establish the session
     @listener.receive_data("Content-Length: 0\nTest-Data: foo\n\n")
-
+ 
     # This should be a response, not a session
     @listener.receive_data("Content-Length: 0\nTest-Reply: bar\n\n")
-
-    @listener.session.headers[:test_data].should.equal 'foo'
-    @listener.recvd_reply.first.headers[:test_reply].should.equal 'bar'
+ 
+    @listener.session.headers[:test_data].should.equal? 'foo'
+    @listener.recvd_reply.first.headers[:test_reply].should.equal? 'bar'
     done
   end
-
-  should "use procs to 'fake' I/O blocking and wait for a response before calling the next proc" do
+ 
+  it "should use procs to 'fake' I/O blocking and wait for a response before calling the next proc" do
     @listener.receive_data("Content-Length: 0\nEstablished-Session: session\n\n")
     @listener.test_state_machine
-    @listener.state_machine_test.should.equal nil
+    @listener.state_machine_test.should.equal? nil
     @listener.receive_data("Content-Length: 3\n\nOk\n\n")
-    @listener.state_machine_test.should.equal "one"
+    @listener.state_machine_test.should.equal? "one"
     @listener.receive_data("Content-Length: 3\n\nOk\n\n")
-    @listener.state_machine_test.should.equal "two"
+    @listener.state_machine_test.should.equal? "two"
     @listener.receive_data("Content-Length: 3\n\nOk\n\n")
-    @listener.state_machine_test.should.equal "three"
+    @listener.state_machine_test.should.equal? "three"
     done
   end
-
-  should "use implicit blocks to 'fake' I/O blocking and wait for a response before calling the next implicit block" do
+ 
+  it "should use implicit blocks to 'fake' I/O blocking and wait for a response before calling the next implicit block" do
     @listener.receive_data("Content-Length: 0\nEstablished-Session: session\n\n")
     @listener.test_state_machine_without_blocks
-    @listener.queue.size.should.equal 3
+    @listener.queue.size.should.equal? 3
     @listener.receive_data("Content-Length: 3\n\nOk\n\n")
-    @listener.queue.size.should.equal 2
+    @listener.queue.size.should.equal? 2
     @listener.receive_data("Content-Length: 3\n\nOk\n\n")
-    @listener.queue.size.should.equal 1
+    @listener.queue.size.should.equal? 1
     @listener.receive_data("Content-Length: 3\n\nOk\n\n")
-    @listener.queue.empty?.should.equal true
+    @listener.queue.empty?.should.equal? true
     done
   end
-
-
-  should "be able to update an existing session" do
+ 
+ 
+  it "should be able to update an existing session" do
     @listener.receive_data("Content-Length: 0\nUnique-ID: abcd-1234-efgh-5678\n\n")
-    @listener.session.headers[:unique_id].should.equal "abcd-1234-efgh-5678"
-    @listener.session.headers[:test_var].should.equal nil
+    @listener.session.headers[:unique_id].should.equal? "abcd-1234-efgh-5678"
+    @listener.session.headers[:test_var].should.equal? nil
     @listener.update_session
     @listener.receive_data("Content-Length: 74\n\nEvent-Name: CHANNEL_DATA\nUnique-ID: abcd-1234-efgh-5678\nTest-Var: foobar\n\n")
-    @listener.session.headers[:test_var].should.equal "foobar"
+    @listener.session.headers[:test_var].should.equal? "foobar"
     done
   end
-
-end
+ 
+ end
