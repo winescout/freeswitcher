@@ -53,14 +53,16 @@ end
 describe "Testing FSR::App::PlayAndGetDigits - handling of non-existant files" do
 
   it "Raise if files specifed absolutely aren't present" do
-    lambda { FSR::App::PlayAndGetDigits.new("/path/soundfile.wav", "/path/invalid.wav") }.
-      should.raise(Errno::ENOENT)
+    lambda { 
+      FSR::App::PlayAndGetDigits.new("/path/soundfile.wav", "/path/invalid.wav") 
+    }.should raise_error(Errno::ENOENT)
   end
 
   it "Not raise if files specifed absolutely aren't present" do
     file_name = File.expand_path(__FILE__)
-    lambda { FSR::App::PlayAndGetDigits.new(file_name, "invalid.wav") }.
-      should.not.raise(Errno::ENOENT)
+    lambda { 
+      FSR::App::PlayAndGetDigits.new(file_name, "invalid.wav") 
+    }.should_not raise_error(Errno::ENOENT)
   end
   
 end

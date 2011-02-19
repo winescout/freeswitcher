@@ -11,8 +11,8 @@ describe FSL::HeaderAndContentResponse do
   end
 
   it "is initializable with 2 hash arguments" do
-    @hcr.headers.should.include? :foo
-    @hcr.content.should.include? :response
+    @hcr.headers.should include :foo
+    @hcr.content.should include :response
   end
 
   it "strips newlines from content values" do
